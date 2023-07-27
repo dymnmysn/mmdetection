@@ -1,12 +1,12 @@
 # dataset settings
 dataset_type = 'CocoPanopticDataset'
-# data_root = 'data/coco/'
+data_root = 'data/waymo/'
 
 # Example to use different file client
 # Method 1: simply set the data root and let the file I/O module
 # automatically infer from prefix (not support LMDB and Memcache yet)
 
-data_root = 's3://openmmlab/datasets/detection/coco/'
+#data_root = 's3://openmmlab/datasets/detection/coco/'
 
 # Method 2: Use `backend_args`, `file_client_args` in versions before 3.0.0rc6
 # backend_args = dict(
@@ -20,6 +20,7 @@ backend_args = None
 train_pipeline = [
     dict(type='LoadImageFromFile', backend_args=backend_args),
     dict(type='LoadPanopticAnnotations', backend_args=backend_args),
+    dict(type='FilterAnnotations', min_gt_bbox_wh=(4.0, 4.0), by_mask = True, min_gt_mask_area = 10),
     dict(type='Resize', scale=(1333, 800), keep_ratio=True),
     dict(type='RandomFlip', prob=0.5),
     dict(type='PackDetInputs')
@@ -43,9 +44,9 @@ train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
-        ann_file='annotations/panoptic_train2017.json',
+        ann_file='annotations/panoptic_train.json',
         data_prefix=dict(
-            img='train2017/', seg='annotations/panoptic_train2017/'),
+            img='train/', seg='annotations/panoptic_train/'),
         filter_cfg=dict(filter_empty_gt=True, min_size=32),
         pipeline=train_pipeline,
         backend_args=backend_args))
@@ -58,8 +59,8 @@ val_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
-        ann_file='annotations/panoptic_val2017.json',
-        data_prefix=dict(img='val2017/', seg='annotations/panoptic_val2017/'),
+        ann_file='annotations/panoptic_val.json',
+        data_prefix=dict(img='val/', seg='annotations/panoptic_val/'),
         test_mode=True,
         pipeline=test_pipeline,
         backend_args=backend_args))
@@ -67,8 +68,8 @@ test_dataloader = val_dataloader
 
 val_evaluator = dict(
     type='CocoPanopticMetric',
-    ann_file=data_root + 'annotations/panoptic_val2017.json',
-    seg_prefix=data_root + 'annotations/panoptic_val2017/',
+    ann_file=data_root + 'annotations/panoptic_val.json',
+    seg_prefix=data_root + 'annotations/panoptic_val/',
     backend_args=backend_args)
 test_evaluator = val_evaluator
 
