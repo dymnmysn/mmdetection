@@ -4,9 +4,11 @@ val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
 
 # learning rate
+# Bura benden
+# Warmup 500 iken 2000 yaptim
 param_scheduler = [
     dict(
-        type='LinearLR', start_factor=0.001, by_epoch=False, begin=0, end=500),
+        type='LinearLR', start_factor=0.001, by_epoch=False, begin=0, end=2000),
     dict(
         type='MultiStepLR',
         begin=0,
