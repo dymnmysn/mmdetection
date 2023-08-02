@@ -251,7 +251,10 @@ class PanopticFPNHead(BaseSemanticHead):
             gt_semantic_segs.reshape(-1).long())
 
         loss_fields = self.loss_fields(seg_fields,gt_fields.cuda())
+        #Bura benden
+        torch.autograd.set_detect_anomaly(True)
         loss_seg += loss_fields
+        torch.autograd.set_detect_anomaly(False)
         return dict(loss_seg=loss_seg)
 
     def init_weights(self) -> None:

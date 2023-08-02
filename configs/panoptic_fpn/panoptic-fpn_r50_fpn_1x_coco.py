@@ -41,5 +41,9 @@ model = dict(
         # used in HeuristicFusionHead
         panoptic=dict(mask_overlap=0.5, stuff_area_limit=4096)))
 
+#Bura benden
+optimizer_config = dict(
+    _delete_=True, grad_clip=dict(max_norm=35, norm_type=2))
+
 # Forced to remove NumClassCheckHook
 custom_hooks = []
