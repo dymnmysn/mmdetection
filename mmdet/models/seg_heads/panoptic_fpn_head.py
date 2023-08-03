@@ -90,7 +90,7 @@ def batch_getfields_classwise(bitmap_batch,tensorlabels):
     batch_fields = []
     out_tensors = []
     for labels,masks in zip(labels,batched_masks):
-        dummy = getfields(masks[0])*0
+        dummy = getfields(masks[0])*0.0
         fields = {i:torch.from_numpy(dummy.copy()) for i in thinglabels}
         for label,mask in zip(labels,masks):
             fields[int(label)] += torch.from_numpy(getfields(mask))
